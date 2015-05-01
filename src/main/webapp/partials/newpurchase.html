@@ -1,0 +1,25 @@
+<H>{{data.locres.Title}}</H>
+<div>
+	<table>
+	<tr>
+		<td>{{data.locres.PurchaseName}}</td> 
+		<td><input type="text" name="purchaseName" ng-model="purchaseName"></td>
+	</tr>
+	<tr>
+		<td>{{data.locres.Price}}</td>
+		<td><input type="text" name="price" ng-model="price"></td>
+	</tr>
+	<tr>
+		<td>{{data.locres.PayDate}}</td>
+		<td><input type="text" name="payDate" ng-model="payDate"></td>
+	</tr>
+	<tr>
+		<td>{{data.locres.CategoryType}}</td>
+		<!-- <td><s type="text" name="payDate" ng-model="payDate"></td> -->
+		<td><select ng-options="category.name for category in data.categories" ng-model="categoryType"></select></td>
+	</tr>
+	
+	</table>
+	<button type="button" ng-click="send()">{{data.locres.SendButton}}</button>
+	
+</div>

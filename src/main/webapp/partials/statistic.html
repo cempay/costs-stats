@@ -1,0 +1,23 @@
+  <div 
+    data-ac-chart="chartType" 
+    data-ac-data="Fchart" 
+    data-ac-config="config" 
+    class="chart"
+	id="chart">
+  </div>
+<div>
+	Hello 6
+	<table>
+		<tr>
+			<th>Название</th>
+			<th>%</th>
+			<th>Сумма</th>
+		</tr>
+		<tr ng-repeat="categoryInfo in categoryInfoList">
+			<td>{{categoryInfo.name}}</td>
+			<td>{{categoryInfo.percent}}</td>
+			<td>{{categoryInfo.categorySum}}</td>
+		</tr>
+	</table>
+</div>
+<div>hello after</div>

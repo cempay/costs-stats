@@ -1,0 +1,42 @@
+<div><h1>{{locres.Title}}</h1></div>
+<!--<div>
+	<table>
+	<tr>
+		<td>{{locres.Name}}</td>
+		<td><input type="text" name="name" ng-model="name"></td>
+	</tr>
+	<tr>
+		<td>{{locres.Password}}</td>
+		<td><input type="text" name="p" ng-model="p"></td>
+	</tr>
+	
+	</table>
+	<button type="button" class="btn btn-default" ng-click="checkLogin()">{{locres.LoginButton}}</button>
+	
+</div>-->
+
+<form name="userForm" class="loginForm" novalidate>
+	<div class="form-group" >
+		<label class="control-label">{{locres.Name}}</label>
+		<input type="text" class="form-control" name="name" ng-model="name" placeholder="Name" />
+	</div>
+	<div class="form-group" >
+		<label class="control-label">{{locres.Password}}</label>
+		<input type="text" class="form-control" name="p" ng-model="p" placeholder="Password" />
+	</div>
+	<button class="btn btn-primary" ng-click="checkLogin()">{{locres.LoginButton}}</button>
+</form>
+
+<!--
+<form name="userForm" novalidate>
+	<div class="form-group" ng-class="{ 'has-error': userForm.name.$invalid }" >
+		<label class="control-label">Name</label>
+		<input type="text" class="form-control" name="name" ng-model="user.name" required placeholder="Name" />
+	</div>
+	<div class="form-group" ng-class="{ 'has-error': userForm.email.$invalid }" >
+		<label class="control-label">Email</label>
+		<input type="email" class="form-control" name="email" ng-model="user.email" required placeholder="Email" />
+	</div>
+	<button class="btn btn-primary" ng-click="save()">Add User</button>
+	<button class="btn btn-link" ng-click="reset()">Reset</button>
+</form>-->
