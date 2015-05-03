@@ -30,12 +30,13 @@ public class StatisticRestService {
     	Map<String, Object> result = new HashMap<String, Object>();
     	
     	List<String> errors = new ArrayList<String>();    	
-    	
-    	List<CategoryInfo> categInfoList = DatabaseService.collectCategoryInfos(LoginUtils.getLogin(hh), null, null);
+
+		String login = LoginUtils.getLogin(hh);
+    	List<CategoryInfo> categInfoList = DatabaseService.collectCategoryInfos(login, null, null);
     	result.put("categoryInfoList", categInfoList);
     	
     	QueryResponse resp = new QueryResponse();
-    	List<Object[]> categMonthGroup = DatabaseService.getCategoryMonthGroups(resp);
+    	List<Object[]> categMonthGroup = DatabaseService.getCategoryMonthGroups(login, resp);
     	if (resp.getCode() != ResponseCode.OK) {
     		errors.add(resp.getMessage());
     	} else {

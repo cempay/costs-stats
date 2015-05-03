@@ -21,7 +21,8 @@ import net.viralpatel.hibernate.Purchase;
 public class DatabaseService {
 	public final static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#0.##");
 	public final static BigDecimal HUNDRED = BigDecimal.valueOf(100L);
-	
+
+	@Deprecated
 	public static void consoleStatisticByScope(Date dateFrom, Date dateTo){
 		StringBuffer stats = new StringBuffer();
 		List<CategoryInfo> infos = collectCategoryInfos(null, dateFrom, dateTo);
@@ -67,7 +68,7 @@ public class DatabaseService {
 		return categInfos;
 	}
 	
-	public static List<Object[]> getCategoryMonthGroups(QueryResponse resp){
+	public static List<Object[]> getCategoryMonthGroups(String login, QueryResponse resp){
 		List<Object[]> result = null;
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
@@ -81,10 +82,12 @@ public class DatabaseService {
 			query.setParameter("categ", category);*/
 			
 			String hql = "select c.name, month(p.payDate), sum(p.price) "
-					+ " from Purchase as p, Category as c where c.id=p.category "
+					+ " from Purchase as p, Category as c"
+					+ " where c.user.login=:login and c.id=p.category "
 					+ " group by c.name, month(p.payDate) "
 					+ " order by c.name, month(p.payDate)";			
-			Query query = session.createQuery(hql);			
+			Query query = session.createQuery(hql);
+			query.setParameter("login", login);
 			result = query.list();
 			resp.setCode(ResponseCode.OK);
 		}	

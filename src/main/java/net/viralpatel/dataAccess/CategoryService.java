@@ -8,6 +8,7 @@ import net.viralpatel.hibernate.Category;
 import net.viralpatel.hibernate.HibernateUtil;
 
 import net.viralpatel.hibernate.User;
+import ngdemo.auth.LoginUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 
 public class CategoryService {
 
+	@Deprecated
 	public static Category createCategory(String name){
 		Category category = null;
 		SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -36,7 +38,7 @@ public class CategoryService {
 	}
 
 	public static Category createCategory(User user, String name, QueryResponse resp){
-		Category category = isCategoryExist(name, resp);
+		Category category = isCategoryExist(user.getLogin(), name, resp);
 		if (resp.getCode() != ResponseCode.OK){
 			return null;
 		}
@@ -80,7 +82,7 @@ public class CategoryService {
 		return res;
 	}
 
-	
+	@Deprecated
 	public static Boolean isCategoryExist(String name) {
 		Boolean exist = false;
 		SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -99,15 +101,16 @@ public class CategoryService {
 		}
 		return exist;
 	}
-	
-	public static Category isCategoryExist(String name, QueryResponse resp) {
+
+	public static Category isCategoryExist(String login, String name, QueryResponse resp) {
 		Category categ = null;
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		try {
 			List categories = session.createCriteria(Category.class)
 				.add(Restrictions.eq("name", name))
-				.list();
+					.createCriteria("user").add(Restrictions.eq("login", login))
+					.list();
 			if (!categories.isEmpty())
 				categ = (Category) categories.get(0);
 			resp.setCode(ResponseCode.OK);
@@ -121,15 +124,16 @@ public class CategoryService {
 		}
 		return categ;
 	}	
-	
-	public static Category isCategoryExistById(Long id, QueryResponse resp) {
+
+	public static Category isCategoryExistById(String login, Long id, QueryResponse resp) {
 		Category categ = null;
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		try {
 			List categories = session.createCriteria(Category.class)
 				.add(Restrictions.eq("id", id))
-				.list();
+					.createCriteria("user").add(Restrictions.eq("login", login))
+					.list();
 			if (!categories.isEmpty())
 				categ = (Category) categories.get(0);
 			resp.setCode(ResponseCode.OK);

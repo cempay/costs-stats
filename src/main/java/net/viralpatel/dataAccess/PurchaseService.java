@@ -21,9 +21,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 public class PurchaseService {
-	/**
-	 * @deprecated
-	 */
+
+	@Deprecated
 	public static Purchase createPurchase(String name, Category category, Date date, BigDecimal price){
 		Purchase purchase = null;
     	SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -43,15 +42,16 @@ public class PurchaseService {
 		}
     	return purchase;
 	}
-	
+
+	@Deprecated
 	public static QueryResponse createPurchase(String name, String categoryName, Date date, BigDecimal price){
 		QueryResponse resp = new QueryResponse();
-		Category categ = CategoryService.isCategoryExist(categoryName, resp);
+		Category categ = CategoryService.isCategoryExist(null, categoryName, resp);
 		
 		if(resp.getCode() != ResponseCode.OK) {
 			return resp;
 		} else if (categ == null) {
-			return new QueryResponse(ResponseCode.ERROR, "Категория с указанным именем '" + categoryName + "' не существует");
+			return new QueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ '" + categoryName + "' пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 		} else {
 	    	SessionFactory sf = HibernateUtil.getSessionFactory();
 	    	Session session = sf.openSession();
@@ -63,7 +63,7 @@ public class PurchaseService {
 		    	resp = new QueryResponse(ResponseCode.OK);
 			}	
 			catch(HibernateException ex){
-				resp = new QueryResponse(ResponseCode.ERROR, "Ошибка при создании покупки '" + name + "'", ex.getMessage());
+				resp = new QueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ '" + name + "'", ex.getMessage());
 				System.out.println("#Database error: "+ ex);
 			}    	
 			finally {
@@ -74,14 +74,14 @@ public class PurchaseService {
 	}
 	
 	/** best */
-	public static QueryResponse createPurchaseByCategoryId(String name, Long categoryId, Date date, BigDecimal price){
+	public static QueryResponse createPurchaseByCategoryId(String login, String name, Long categoryId, Date date, BigDecimal price){
 		QueryResponse resp = new QueryResponse();		
-		Category categ = CategoryService.isCategoryExistById(categoryId, resp);
+		Category categ = CategoryService.isCategoryExistById(login, categoryId, resp);
 		
 		if(resp.getCode() != ResponseCode.OK) {
 			return resp;
 		} else if (categ == null) {
-			return new QueryResponse(ResponseCode.ERROR, "Категория с указанным id '" + categoryId.toString() + "' не существует");
+			return new QueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ id '" + categoryId.toString() + "' пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 		} else {
 	    	SessionFactory sf = HibernateUtil.getSessionFactory();
 	    	Session session = sf.openSession();
@@ -93,7 +93,7 @@ public class PurchaseService {
 		    	resp = new QueryResponse(ResponseCode.OK);
 			}	
 			catch(HibernateException ex){
-				resp = new QueryResponse(ResponseCode.ERROR, "Ошибка при создании покупки '" + name + "'", ex.getMessage());
+				resp = new QueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ '" + name + "'", ex.getMessage());
 				System.out.println("#Database error: "+ ex);
 			}    	
 			finally {
@@ -120,7 +120,8 @@ public class PurchaseService {
 		}
 		return res;
 	}
-	
+
+	@Deprecated
 	public static List<Purchase> getPurchasesByCategoryByPeriod(String categoryName, Date dateFrom, Date dateTo, QueryResponse resp){
 		List res = null;
     	SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -159,14 +160,15 @@ public class PurchaseService {
 		}	
     	catch(HibernateException ex){
     		System.out.println("#Database error: "+ ex);
-    		resp.fillQueryResponse(ResponseCode.ERROR, "Ошибка получения списка покупок по периодам.", ex.getMessage());
+    		resp.fillQueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex.getMessage());
     	}    	
 		finally {
 			session.close();
 		}
 		return res;
 	}
-	
+
+	//todo login
 	public static List<Purchase> getPurchasesByCategoryIdByPeriod(Long categoryId, Date dateFrom, Date dateTo, QueryResponse resp){
 		List res = null;
     	SessionFactory sf = HibernateUtil.getSessionFactory();
@@ -206,7 +208,7 @@ public class PurchaseService {
 		}	
     	catch(HibernateException ex){
     		System.out.println("#Database error: "+ ex);
-    		resp.fillQueryResponse(ResponseCode.ERROR, "Ошибка получения списка покупок по периодам.", ex.getMessage());
+    		resp.fillQueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex.getMessage());
     	}    	
 		finally {
 			session.close();
@@ -231,7 +233,7 @@ public class PurchaseService {
 		}	
 		catch(HibernateException ex){
 			System.out.println("#Database error: "+ ex);
-			resp.fillQueryResponse(ResponseCode.ERROR, "Ошибка получения списка периодов.", ex.getMessage());
+			resp.fillQueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex.getMessage());
 		}    	
 		finally {
 			session.close();

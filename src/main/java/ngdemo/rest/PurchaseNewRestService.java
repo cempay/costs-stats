@@ -63,8 +63,9 @@ public class PurchaseNewRestService {
 			  @Context HttpHeaders hh){
 	  	Map<String, Object> result = new HashMap<String, Object>();	  	
 	  	List<String> errors = new ArrayList<String>();    	
-	  	Map<String, String> info = new HashMap<String, String>();	
-    	result.put("categories", getCategoryRestList(LoginUtils.getLogin(hh)));
+	  	Map<String, String> info = new HashMap<String, String>();
+		String login = LoginUtils.getLogin(hh);
+    	result.put("categories", getCategoryRestList(login));
     	result.put("info", info);
     	result.put("locres", locres);
     	result.put("errors", errors);
@@ -101,7 +102,7 @@ public class PurchaseNewRestService {
 		}	  	
 	  	
 	  	QueryResponse resp = PurchaseService.createPurchaseByCategoryId(
-	  			purchaseName, categoryId, date, aPrice);
+	  			login, purchaseName, categoryId, date, aPrice);
     	if (resp.getCode() != ResponseCode.OK) {
     		errors.add(resp.getMessage());
     	} else {			    	
