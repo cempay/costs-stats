@@ -7,6 +7,7 @@ import net.viralpatel.common.ResponseCode;
 import net.viralpatel.hibernate.Category;
 import net.viralpatel.hibernate.HibernateUtil;
 
+import net.viralpatel.hibernate.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,8 +34,8 @@ public class CategoryService {
 		}
 		return category;
 	}
-	
-	public static Category createCategory(String name, QueryResponse resp){
+
+	public static Category createCategory(User user, String name, QueryResponse resp){
 		Category category = isCategoryExist(name, resp);
 		if (resp.getCode() != ResponseCode.OK){
 			return null;
@@ -45,6 +46,7 @@ public class CategoryService {
 		try {
 	    	session.beginTransaction();	    	
 	    	category = new Category(name);
+			category.setUser(user);
 	    	session.save(category);
 	    	session.getTransaction().commit();
 	    	resp.setCode(ResponseCode.OK);

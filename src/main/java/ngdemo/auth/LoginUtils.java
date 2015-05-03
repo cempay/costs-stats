@@ -29,7 +29,35 @@ public class LoginUtils {
 	public static String getLogin(HttpHeaders headers){
 		MultivaluedMap<String, String> headerParams = headers.getRequestHeaders();
 		String[] authInfo = LoginUtils.decodeAuth(headerParams.get("authorization").get(0));
+		if (authInfo[0] == null)
+			log.error("Authentication. Null login for header: " + headerParams.get("authorization").get(0));
 		return authInfo[0];
+	}
+
+	public static User getUserEntity(HttpHeaders headers){
+		User user = null;
+		String login = getLogin(headers);
+		if (login == null || login.trim().equals("")) {
+			log.error("Authentication. Failed getting the User: login is null or empty");
+			return null;
+		}
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		try {
+			List<User> users = session.createCriteria(User.class)
+					.add(Restrictions.eq("login", login))
+					.list();
+			if (!users.isEmpty() && users.size() == 1)
+				user = users.get(0);
+		}
+		catch(HibernateException ex){
+			user = null;
+			log.error("Database. Authentication. Failed getting the User", ex);
+		}
+		finally {
+			session.close();
+		}
+		return user;
 	}
 
 	public static String[] decodeAuth(String authCredentials) {
