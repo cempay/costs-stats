@@ -15,27 +15,13 @@ public class AuthenticationServiceCustom {
 
 		if (null == authCredentials)
 			return false;
-		// header value format will be "Basic encodedstring" for Basic
-		// authentication. Example "Basic YWRtaW46YWRtaW4="
-		final String encodedUserPassword = authCredentials.replaceFirst("Basic"
-				+ " ", "");
-		String usernameAndPassword = null;
-		try {
-//			byte[] decodedBytes = Base64.getDecoder().decode(
-//					encodedUserPassword);
-			BASE64Decoder decoder = new BASE64Decoder();
-			byte[] decodedBytes = decoder.decodeBuffer(encodedUserPassword);
-			usernameAndPassword = new String(decodedBytes, "UTF-8");
-		} catch (IOException e) {
-			log.error("Authentication. Decoding from string '"+ encodedUserPassword +"' failed", e);
-		}
-		final StringTokenizer tokenizer = new StringTokenizer(
-				usernameAndPassword, ":");
-		final String username = tokenizer.nextToken();
-		final String password = tokenizer.nextToken();
+		String[] authInfo = LoginUtils.decodeAuth(authCredentials);
+		final String username = authInfo[0];
+		final String password = authInfo[1];
 
 		QueryResponse resp = new QueryResponse();
-		boolean authenticationStatus = LoginUtils.checkUserValid(username, password, resp);
+		boolean authenticationStatus = (username == null || password == null) ? false :
+				LoginUtils.checkUserValid(username, password, resp);
 		if (!authenticationStatus)
 			log.info("Authentication. Failed check for login: "+username+". Reason: "+resp.getMessage());
 		return authenticationStatus;

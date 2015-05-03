@@ -52,7 +52,7 @@ public class CategoryService {
 		catch(HibernateException ex){
 			category = null;
 			System.out.println("#Database error: "+ ex);
-			resp.fillQueryResponse(ResponseCode.ERROR, "Ошибка при создании категории.", ex.getMessage());
+			resp.fillQueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex.getMessage());
 		}    	
 		finally {
 			session.close();
@@ -60,13 +60,14 @@ public class CategoryService {
 		return category;
 	}
 
-	public static List<Category> getCategories(){
+	public static List<Category> getCategories(String login){
 		List res = null;
 		SessionFactory sf = HibernateUtil.getSessionFactory();
 		Session session = sf.openSession();
 		try {
 			res = session.createCriteria(Category.class)
-				.list();
+					.createCriteria("user").add(Restrictions.eq("login", login))
+					.list();
 		}	
 		catch(HibernateException ex){
 			System.out.println("#Database error: "+ ex);
@@ -111,7 +112,7 @@ public class CategoryService {
 		}	
 		catch(HibernateException ex){
 			System.out.println("#Database error: "+ ex);
-			resp.fillQueryResponse(ResponseCode.ERROR, "Ошибка при проверке существования категории.", ex.getMessage());
+			resp.fillQueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex.getMessage());
 		}    	
 		finally {
 			session.close();
@@ -133,7 +134,7 @@ public class CategoryService {
 		}	
 		catch(HibernateException ex){
 			System.out.println("#Database error: "+ ex);
-			resp.fillQueryResponse(ResponseCode.ERROR, "Ошибка при проверке существования категории.", ex.getMessage());
+			resp.fillQueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex.getMessage());
 		}    	
 		finally {
 			session.close();
@@ -141,7 +142,7 @@ public class CategoryService {
 		return categ;
 	}
 	
-	public static String[] getCategoriesNames(){
+/*	public static String[] getCategoriesNames(){
 		String[] res = null;
 		List<Category> categs = CategoryService.getCategories();
 		if (categs != null && categs.size() != 0) {
@@ -152,6 +153,6 @@ public class CategoryService {
 		}
 		if (res == null) res = new String[0];
 		return res;
-	}
+	}*/
 
 }

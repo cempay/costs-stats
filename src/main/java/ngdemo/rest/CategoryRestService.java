@@ -8,10 +8,13 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import net.viralpatel.dataAccess.CategoryService;
 import net.viralpatel.hibernate.Category;
+import ngdemo.auth.LoginUtils;
 import ngdemo.domain.CategoryRest;
 
 @Path("/user/categories")
@@ -24,14 +27,14 @@ public class CategoryRestService {
 	
     @GET
     @Produces(MediaType.APPLICATION_JSON + ";CHARSET=UTF-8")
-    public Map<String, Object> getCategoriesInJSON(){
+    public Map<String, Object> getCategoriesInJSON(@Context HttpHeaders hh){
     	Map<String, Object> result = new HashMap<String, Object>();
     	
     	List<String> errors = new ArrayList<String>();
     	result.put("errors", errors);
     	
     	List<CategoryRest> categRestList = new ArrayList<CategoryRest>();
-    	List<Category> categs = CategoryService.getCategories();
+    	List<Category> categs = CategoryService.getCategories(LoginUtils.getLogin(hh));
     	for(Category categ: categs){
     		categRestList.add(new CategoryRest(categ.getId(), categ.getName()));
     	}

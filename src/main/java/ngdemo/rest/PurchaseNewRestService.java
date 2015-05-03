@@ -4,18 +4,17 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import net.viralpatel.common.DateUtils;
@@ -24,6 +23,7 @@ import net.viralpatel.common.ResponseCode;
 import net.viralpatel.dataAccess.CategoryService;
 import net.viralpatel.dataAccess.PurchaseService;
 import net.viralpatel.hibernate.Category;
+import ngdemo.auth.LoginUtils;
 import ngdemo.domain.CategoryRest;
 
 @Path("/user/newpurchase")
@@ -44,10 +44,10 @@ public class PurchaseNewRestService {
 	
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> getNewPurchaseFormInJSON(){
+    public Map<String, Object> getNewPurchaseFormInJSON(@Context HttpHeaders hh){
     	Map<String, Object> result = new HashMap<String, Object>();    	
     	List<String> errors = new ArrayList<String>();
-    	result.put("categories", getCategoryRestList());    	
+    	result.put("categories", getCategoryRestList(LoginUtils.getLogin(hh)));
     	result.put("locres", locres);
     	result.put("errors", errors);
     	return result;
@@ -59,11 +59,12 @@ public class PurchaseNewRestService {
 			  @PathParam("categoryType") String categoryType, 
 			  @PathParam("payDate") String payDate,
 			  @PathParam("purchaseName") String purchaseName, 
-			  @PathParam("price") String price){
+			  @PathParam("price") String price,
+			  @Context HttpHeaders hh){
 	  	Map<String, Object> result = new HashMap<String, Object>();	  	
 	  	List<String> errors = new ArrayList<String>();    	
 	  	Map<String, String> info = new HashMap<String, String>();	
-    	result.put("categories", getCategoryRestList());
+    	result.put("categories", getCategoryRestList(LoginUtils.getLogin(hh)));
     	result.put("info", info);
     	result.put("locres", locres);
     	result.put("errors", errors);
@@ -110,9 +111,9 @@ public class PurchaseNewRestService {
 	  	return result;
 	  }
       
-      private List<CategoryRest> getCategoryRestList(){
+      private List<CategoryRest> getCategoryRestList(String login){
       	List<CategoryRest> categRestList = new ArrayList<CategoryRest>();
-      	List<Category> categs = CategoryService.getCategories();
+      	List<Category> categs = CategoryService.getCategories(login);
       	for(Category categ: categs){
       		categRestList.add(new CategoryRest(categ.getId(), categ.getName()));
       	}  

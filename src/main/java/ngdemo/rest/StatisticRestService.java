@@ -3,40 +3,35 @@ package ngdemo.rest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableSet;
-import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import net.viralpatel.common.QueryResponse;
 import net.viralpatel.common.ResponseCode;
 import net.viralpatel.dataAccess.CategoryInfo;
-import net.viralpatel.dataAccess.CategoryService;
 import net.viralpatel.dataAccess.DatabaseService;
-import net.viralpatel.hibernate.Category;
-import ngdemo.domain.CategoryRest;
+import ngdemo.auth.LoginUtils;
 
 @Path("/user/statistic")
 public class StatisticRestService {
 	
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> getCategoriesInJSON(){
+    public Map<String, Object> getCategoriesInJSON(@Context HttpHeaders hh){
     	Map<String, Object> result = new HashMap<String, Object>();
     	
     	List<String> errors = new ArrayList<String>();    	
     	
-    	List<CategoryInfo> categInfoList = DatabaseService.collectCategoryInfos(null, null);
+    	List<CategoryInfo> categInfoList = DatabaseService.collectCategoryInfos(LoginUtils.getLogin(hh), null, null);
     	result.put("categoryInfoList", categInfoList);
     	
     	QueryResponse resp = new QueryResponse();

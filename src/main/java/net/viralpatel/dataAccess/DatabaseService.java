@@ -24,19 +24,19 @@ public class DatabaseService {
 	
 	public static void consoleStatisticByScope(Date dateFrom, Date dateTo){
 		StringBuffer stats = new StringBuffer();
-		List<CategoryInfo> infos = collectCategoryInfos(dateFrom, dateTo);
-		stats.append("\n------------- Статистика по категориям: -------------\n");		
+		List<CategoryInfo> infos = collectCategoryInfos(null, dateFrom, dateTo);
+		stats.append("\n------------- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: -------------\n");		
 		if(infos.isEmpty()) {
-			stats.append("Список категорий пуст.");
+			stats.append("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.");
 		} else {			
 			for(CategoryInfo info: infos){
 				if (info.getTotalSum().equals(BigDecimal.ZERO)) {
 					System.out.println("Warning: total category sum is zero");
-					stats.append(String.format("Категория '%s'\n", info.getName()
+					stats.append(String.format("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ '%s'\n", info.getName()
 							));
 				} else {
 					BigDecimal res = info.getCategorySum().multiply(HUNDRED).divide(info.getTotalSum(), BigDecimal.ROUND_HALF_DOWN);
-					stats.append(String.format("Категория '%s': %s %% \n", info.getName(), 
+					stats.append(String.format("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ '%s': %s %% \n", info.getName(), 
 							//info.getCategorySum().divide(info.getTotalSum().set)
 							DECIMAL_FORMAT.format(res.doubleValue())
 							));
@@ -47,8 +47,8 @@ public class DatabaseService {
 		System.out.println(stats.toString());
 	}
 	
-	public static List<CategoryInfo> collectCategoryInfos(Date dateFrom, Date dateTo) {
-		List<Category> categories = CategoryService.getCategories();
+	public static List<CategoryInfo> collectCategoryInfos(String login, Date dateFrom, Date dateTo) {
+		List<Category> categories = CategoryService.getCategories(login);
 		BigDecimal totalSum = BigDecimal.ZERO;
 		List<CategoryInfo> categInfos = new ArrayList<CategoryInfo>();
 		for(Category categ: categories){				
@@ -90,7 +90,7 @@ public class DatabaseService {
 		}	
 		catch(HibernateException ex){
 			System.out.println("#Database error: "+ ex);
-			resp.fillQueryResponse(ResponseCode.ERROR, "Ошибка получения групп категорий и месяцев.", ex.getMessage());
+			resp.fillQueryResponse(ResponseCode.ERROR, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.", ex.getMessage());
 		}    	
 		finally {
 			session.close();
