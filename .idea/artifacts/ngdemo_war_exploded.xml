@@ -41,7 +41,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="D:\workspace\idea_workspace\angularTest\target/MANIFEST.MF" />
+        <element id="file-copy" path="F:\workspace\idea_win7\costs-stats\target/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="ngdemo/web/Web" />
     </root>

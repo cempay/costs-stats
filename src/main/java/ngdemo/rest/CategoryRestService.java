@@ -23,7 +23,7 @@ public class CategoryRestService {
 	}
 	
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON + ";CHARSET=UTF-8")
     public Map<String, Object> getCategoriesInJSON(){
     	Map<String, Object> result = new HashMap<String, Object>();
     	
