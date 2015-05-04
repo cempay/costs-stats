@@ -1,4 +1,7 @@
-<H>{{data.locres.Title}}</H>
+<div>
+	<h1>{{data.locres.Title}}</h1>
+</div>
+<!--
 <div>
 	<table>
 	<tr>
@@ -15,7 +18,7 @@
 	</tr>
 	<tr>
 		<td>{{data.locres.CategoryType}}</td>
-		<!-- <td><s type="text" name="payDate" ng-model="payDate"></td> -->
+		&lt;!&ndash; <td><s type="text" name="payDate" ng-model="payDate"></td> &ndash;&gt;
 		<td><select ng-options="category.name for category in data.categories" ng-model="categoryType"></select></td>
 	</tr>
 	
@@ -23,3 +26,33 @@
 	<button type="button" ng-click="send()">{{data.locres.SendButton}}</button>
 	
 </div>
+-->
+
+<form name="newPurchaseForm" class="newPurchaseForm" novalidate>
+	<div class="form-group">
+		<label class="control-label">{{data.locres.PurchaseName}}</label>
+		<input type="text" class="form-control" name="purchaseName" ng-model="purchaseName" placeholder="{{data.locres.PurchaseName}}" />
+	</div>
+	<div class="form-group">
+		<label class="control-label">{{data.locres.Price}}</label>
+		<input type="text" class="form-control" name="price" ng-model="price" placeholder="{{data.locres.Price}}" />
+	</div>
+	<div class="form-group">
+		<label class="control-label">{{data.locres.PayDate}}</label>
+		<input type="text" class="form-control" name="payDate" ng-model="payDate" placeholder="{{data.locres.PayDate}}" />
+	</div>
+<!--	<div>
+		<label class="control-label">{{data.locres.PayDate}}</label>
+		<p class="input-group">
+			<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="payDate" is-open="opened" ng-required="true" close-text="Close" />
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+			</span>
+		</p>
+	</div>-->
+	<div class="form-group">
+		<label class="control-label">{{data.locres.CategoryType}}</label>
+		<select class="form-control" ng-options="category.name for category in data.categories" ng-model="categoryType"><option></option></select>
+	</div>
+	<button class="btn btn-primary" ng-click="send()">{{data.locres.SendButton}}</button>
+</form>
