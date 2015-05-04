@@ -8,17 +8,17 @@ app.controller('NewCategoryController', ['$scope', '$http', '$routeParams', func
     	
     $http.get('/ngdemo/rest/user/newcategory' + path)
     .success(function(response) {
-    	$scope.data = response
+    	$scope.data = response;
     	$scope.send = function(){
     		if ($scope.isEmpty($scope.categoryName)){
     			alert(response.locres.CategoryNameEmptyAlert);
     		} else {
     			location.href = '#/newcategory/'+$scope.categoryName;
     		}
-    	}
+    	};
     	$scope.isEmpty = function (str) {
     	    return (!str || 0 === str.trim().length);
-    	} 
+    	};
     	
     	if (response.info && response.info.success) {
     		alert(response.info.success);

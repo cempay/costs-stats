@@ -1,9 +1,16 @@
 <div>
-	<h1>{{data.locres.Title}}</h1>
+	<h1>{{data.locres.Head}}</h1>
 </div>
-<div>
+<!--<div>
 	{{data.locres.CategoryName}} 
 	<input type="text" name="categoryName" ng-model="categoryName"><br />
 	<button type="button" ng-click="send()">{{data.locres.SendButton}}</button>
 	
-</div>
+</div>-->
+<form name="newCategoryForm" class="newCategoryForm" novalidate>
+	<div class="form-group">
+		<label class="control-label">{{data.locres.InputCategoryName}}</label>
+		<input type="text" class="form-control" name="categoryName" ng-model="categoryName" placeholder="{{data.locres.CategoryName}}" />
+	</div>
+	<button class="btn btn-primary" ng-click="send()">{{data.locres.SendButton}}</button>
+</form>

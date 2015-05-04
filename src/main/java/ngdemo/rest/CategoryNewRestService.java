@@ -27,7 +27,8 @@ public class CategoryNewRestService {
 	//static block
 	{
 		locres.put("Head", "Создание новой категории");
-    	locres.put("CategoryName", "Название категории");
+    	locres.put("InputCategoryName", "Введите название категории");
+    	locres.put("CategoryName", "Новая категория");
     	locres.put("CategoryNameEmptyAlert", "Название категории не должно быть пустым");
     	locres.put("SendButton", "Сохранить");		
 	}
