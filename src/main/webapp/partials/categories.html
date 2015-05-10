@@ -1,10 +1,20 @@
 <div>
 	<h1>{{locres.Head}}</h1>
 </div>
+<!--
 <div>
 	<div ng-repeat="category in categories">
 		<ul>
 			<li><a ng-click="getPurchasesByCategory(category)">{{ category.name }}</a></li>
 		</ul>
 	</div>	
-</div>
+</div>-->
+
+<accordion close-others="oneAtATime">
+	<accordion-group heading="{{category.name}}" is-open="category.open" ng-repeat="category in categories">
+		<accordion-heading>
+			{{category.name}}<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': category.open, 'glyphicon-chevron-right': !category.open}"></i>-->
+		</accordion-heading>
+		<div ng-repeat="purchase in category.purchases">{{purchase.payDate}} {{purchase.name}} {{purchase.price}}</div>
+	</accordion-group>
+</accordion>

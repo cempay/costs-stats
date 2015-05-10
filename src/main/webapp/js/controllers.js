@@ -11,7 +11,8 @@ var app = angular.module('ngdemo.controllers', ['angularCharts']);
 // http://stackoverflow.com/questions/14718826/angularjs-disable-partial-caching-on-dev-machine
 app.run(function ($rootScope, $templateCache, $http) {
     $rootScope.$on('$viewContentLoaded', function () {
-        $templateCache.removeAll();
+        //angularUI Bootstrap - *.tpls.html not found error
+        //$templateCache.removeAll();
     });
 	//$http.defaults.headers.common.Authorization = "Basic YWRtaW46YWRtaW4=";
 });
