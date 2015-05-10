@@ -13,6 +13,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import net.viralpatel.common.DateUtils;
@@ -23,6 +25,7 @@ import net.viralpatel.dataAccess.CategoryService;
 import net.viralpatel.dataAccess.PurchaseService;
 import net.viralpatel.hibernate.Category;
 import net.viralpatel.hibernate.Purchase;
+import ngdemo.auth.LoginUtils;
 import ngdemo.domain.CategoryRest;
 import ngdemo.domain.PurchaseRest;
 
@@ -31,7 +34,7 @@ public class PurchaseRestService {
     @GET
 //    @Path("{categoryId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Map<String, Object> getPurchasesInJSON(@PathParam("categoryId") String categoryId){
+    public Map<String, Object> getPurchasesInJSON(@PathParam("categoryId") String categoryId, @Context HttpHeaders hh){
     	Map<String, Object> result = new HashMap<String, Object>();
     	
     	List<String> errors = new ArrayList<String>();    	
@@ -50,10 +53,11 @@ public class PurchaseRestService {
     	calendar.add(Calendar.SECOND, -1);*/
     	Date dateFrom = DateUtils.beginOfMonth(null);
     	Date dateTo = DateUtils.endOfMonth(null);
+		String login = LoginUtils.getLogin(hh);
     	
     	QueryResponse resp = new QueryResponse();
     	List<Purchase> purchases = PurchaseService.getPurchasesByCategoryIdByPeriod(
-    			Long.valueOf(categoryId), dateFrom, dateTo, resp);
+    			login, Long.valueOf(categoryId), dateFrom, dateTo, resp);
     	if (resp.getCode() != ResponseCode.OK) {
     		errors.add(resp.getMessage());
     	} else {    	

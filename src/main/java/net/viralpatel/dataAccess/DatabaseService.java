@@ -54,7 +54,7 @@ public class DatabaseService {
 		List<CategoryInfo> categInfos = new ArrayList<CategoryInfo>();
 		for(Category categ: categories){				
 			BigDecimal categSum = BigDecimal.ZERO;
-			List<Purchase> categPurchases = PurchaseService.getPurchasesByCategory(categ);
+			List<Purchase> categPurchases = PurchaseService.getPurchasesByCategory(login, categ);
 			for(Purchase purch: categPurchases)
 				categSum = categSum.add(purch.getPrice());
 			CategoryInfo info = new CategoryInfo(categ.getName(), categSum, null, null);

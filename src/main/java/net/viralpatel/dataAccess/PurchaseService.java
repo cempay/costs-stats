@@ -18,6 +18,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 public class PurchaseService {
@@ -103,14 +104,22 @@ public class PurchaseService {
 		return resp;
 	}
 	
-	public static List<Purchase> getPurchasesByCategory(Category category){
+	public static List<Purchase> getPurchasesByCategory(String login, Category category){
 		List res = null;
     	SessionFactory sf = HibernateUtil.getSessionFactory();
     	Session session = sf.openSession();
 		try {
-			res = session.createCriteria(Purchase.class)
-					.add(Restrictions.eq("category", category))
-					.list();
+//			res = session.createCriteria(Purchase.class)
+//					.add(Restrictions.eq("category", category))
+//					.createCriteria("user").add(Restrictions.eq("login", login))
+//					.addOrder(Order.desc("payDate"))
+//					.list();
+
+			String hql = "from Purchase where category=:category and category.user.login = :login order by payDate desc";
+			Query query = session.createQuery(hql);
+			query.setParameter("category", category);
+			query.setParameter("login", login);
+			res = query.list();
 		}	
     	catch(HibernateException ex){
     		System.out.println("#Database error: "+ ex);
@@ -168,8 +177,7 @@ public class PurchaseService {
 		return res;
 	}
 
-	//todo login
-	public static List<Purchase> getPurchasesByCategoryIdByPeriod(Long categoryId, Date dateFrom, Date dateTo, QueryResponse resp){
+	public static List<Purchase> getPurchasesByCategoryIdByPeriod(String login, Long categoryId, Date dateFrom, Date dateTo, QueryResponse resp){
 		List res = null;
     	SessionFactory sf = HibernateUtil.getSessionFactory();
     	Session session = sf.openSession();
@@ -189,7 +197,8 @@ public class PurchaseService {
 			
 			
 			Criteria cr1 = session.createCriteria(Category.class);
-			cr1.add(Restrictions.eq("id", categoryId));
+			cr1.add(Restrictions.eq("id", categoryId))
+					.createCriteria("user").add(Restrictions.eq("login", login));
 			List<Category> categories = (List<Category>)cr1.list();
 			
 			Calendar calendar = new GregorianCalendar();
@@ -199,7 +208,8 @@ public class PurchaseService {
 			
 			Criteria cr = session.createCriteria(Purchase.class);
 			cr.add(Restrictions.eq("category", categories.get(0)))
-			.add(Restrictions.between("payDate", dateFrom, dateTo))
+					.add(Restrictions.between("payDate", dateFrom, dateTo))
+					.addOrder(Order.desc("payDate"))
 			;
 			res = cr.list();
 			
