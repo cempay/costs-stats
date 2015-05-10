@@ -1,20 +1,28 @@
 <div>
 	<h1>{{locres.Head}}</h1>
 </div>
-<!--
-<div>
-	<div ng-repeat="category in categories">
-		<ul>
-			<li><a ng-click="getPurchasesByCategory(category)">{{ category.name }}</a></li>
-		</ul>
-	</div>	
-</div>-->
-
+<form class="categoryList">
 <accordion close-others="oneAtATime">
 	<accordion-group heading="{{category.name}}" is-open="category.open" ng-repeat="category in categories" ng-click="getNestedPurchasesByCategory(category, $index)">
 		<accordion-heading>
-			{{category.name}}<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': category.open, 'glyphicon-chevron-right': !category.open}"></i>-->
+			{{category.name}}
 		</accordion-heading>
-		<div ng-repeat="purchase in category.purchases">{{purchase.payDate}} {{purchase.name}} {{purchase.price}}</div>
+		<table class="table">
+			<thead>
+			<tr>
+				<th>{{locres.t_Date}}</th>
+				<th>{{locres.t_Buy}}</th>
+				<th>{{locres.t_Price}}</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="purchase in category.purchases">
+				<td>{{purchase.payDate}}</td>
+				<td>{{purchase.name}}</td>
+				<td>{{purchase.price}}</td>
+			</tr>
+			</tbody>
+		</table>
 	</accordion-group>
 </accordion>
+</form>

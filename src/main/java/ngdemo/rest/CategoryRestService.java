@@ -28,6 +28,9 @@ public class CategoryRestService {
 	
 	{
 		locres.put("Head", "Список категорий:");
+		locres.put("t_Buy", "Покупка");
+		locres.put("t_Price", "Цена");
+		locres.put("t_Date", "Дата");
 	}
 	
     @GET
