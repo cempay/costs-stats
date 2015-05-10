@@ -13,8 +13,28 @@ app.controller('CategoriesController', ['$scope', '$http', function ($scope, $ht
 
             if ($scope.categories){
                 $scope.categories[0].open = true;
+                $scope.categories[0].frash = true;
             }
             $scope.oneAtATime = true;
+
+            $scope.getNestedPurchasesByCategory = function (categ2, index) {
+                if (!$scope.categories[index].open)
+                    return;
+                if ($scope.categories[index].frash)
+                    return;
+                $http.get('/ngdemo/rest/user/purchases/'+categ2.id)
+                    .success(function (resp2) {
+                        $scope.categories[index].purchases = resp2.purchases;
+                        $scope.categories[index].frash = true;
+                    })
+                    .error(function (data2, status2, headers2, config2) {
+                        if (status2 == 401) {
+                            alert('not authorized2!');
+                        }
+                        else
+                            alert('other error2!');
+                    });
+            };
 
             $scope.getPurchasesByCategory = function (categ) {
                 location.href = '#/purchases/' + categ.id;
