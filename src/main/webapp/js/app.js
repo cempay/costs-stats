@@ -10,7 +10,7 @@ angular.module('ngdemo', ['ngRoute', 'ui.bootstrap', 'ngdemo.filters', 'ngdemo.s
         $routeProvider.when('/newcategory', {templateUrl: 'partials/newcategory.html', controller: 'NewCategoryController'});
         $routeProvider.when('/newcategory/:categoryName', {templateUrl: 'partials/newcategory.html', controller: 'NewCategoryController'});
         $routeProvider.when('/newpurchase', {templateUrl: 'partials/newpurchase.html', controller: 'NewPurchaseController'});
-        $routeProvider.when('/newpurchase/:categoryType/:payDate/:purchaseName/:price', {templateUrl: 'partials/newpurchase.html', controller: 'NewPurchaseController'});
+        $routeProvider.when('/newpurchase/:categoryType/:payDate/:purchaseName/:price/:purchId', {templateUrl: 'partials/newpurchase.html', controller: 'NewPurchaseController'});
         $routeProvider.when('/newpurchase/edit/:purchaseId', {templateUrl: 'partials/newpurchase.html', controller: 'NewPurchaseController'});
         $routeProvider.when('/statistic', {templateUrl: 'partials/statistic.html', controller: 'StatisticController'});
         $routeProvider.otherwise({redirectTo: '/login'});

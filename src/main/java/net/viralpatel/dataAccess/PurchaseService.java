@@ -103,6 +103,42 @@ public class PurchaseService {
 		}
 		return resp;
 	}
+
+	/** best */
+	public static QueryResponse updatePurchaseByPurchaseId(Long purchaseId, String login, String name, Long categoryId, Date date, BigDecimal price){
+		QueryResponse resp = new QueryResponse();
+		Category categ = CategoryService.isCategoryExistById(login, categoryId, resp);
+
+		if(resp.getCode() != ResponseCode.OK) {
+			return resp;
+		} else if (categ == null) {
+			return new QueryResponse(ResponseCode.ERROR, "��������� � ��������� id '" + categoryId.toString() + "' �� ����������");
+		} else {
+	    	SessionFactory sf = HibernateUtil.getSessionFactory();
+	    	Session session = sf.openSession();
+	    	try {
+		    	session.beginTransaction();
+//		    	Purchase purchase = new Purchase(name, categ, date, price);
+//		    	session.save(purchase);
+				Purchase purchase = getPurchaseById(purchaseId);
+				purchase.setCategory(categ);
+				purchase.setName(name);
+				purchase.setPayDate(date);
+				purchase.setPrice(price);
+				session.update(purchase);
+		    	session.getTransaction().commit();
+		    	resp = new QueryResponse(ResponseCode.OK);
+			}
+			catch(HibernateException ex){
+				resp = new QueryResponse(ResponseCode.ERROR, "������ ��� �������� ������� '" + name + "'", ex.getMessage());
+				System.out.println("#Database error: "+ ex);
+			}
+			finally {
+				session.close();
+			}
+		}
+		return resp;
+	}
 	
 	public static List<Purchase> getPurchasesByCategory(String login, Category category){
 		List res = null;
@@ -130,7 +166,7 @@ public class PurchaseService {
 		return res;
 	}
 
-	public static Purchase getPurchaseById(/*todo String login,*/ String id){
+	public static Purchase getPurchaseById(/*todo String login,*/ Long id){
 		Purchase purch = null;
     	SessionFactory sf = HibernateUtil.getSessionFactory();
     	Session session = sf.openSession();
@@ -143,7 +179,7 @@ public class PurchaseService {
 			if (res.size() > 0)
 				purch = (Purchase)res.get(0);
 		}
-    	catch(HibernateException ex){
+    	catch(Exception ex){
     		System.out.println("#Database error: "+ ex);
     	}
 		finally {

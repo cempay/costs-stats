@@ -32,10 +32,12 @@ import ngdemo.domain.PurchaseRest;
 @Path("/user/newpurchase")
 public class PurchaseNewRestService {	
 	protected final static Map<String,String> locres = new HashMap<String,String>();
+	private final static Long GENERATE_NEW_ID_FLAG = -1L;
 	
 	//static block
 	{
 		locres.put("Title", "Создание новой покупки");
+		locres.put("TitleEdit", "Редактирование покупки");
     	locres.put("PurchaseName", "Название");
     	locres.put("Price", "Цена");
     	locres.put("PayDate", "Дата");
@@ -57,10 +59,10 @@ public class PurchaseNewRestService {
     }
 
 	@GET
-	@Path("/edit")
+	@Path("/edit/{purchaseId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Map<String, Object> editPurchaseByIdJSON(
-			@PathParam("purchaseId") String purchaseId,
+			@PathParam("purchaseId") Long purchaseId,
 			@Context HttpHeaders hh){
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("locres", locres);
@@ -82,13 +84,14 @@ public class PurchaseNewRestService {
 	}
 
       @GET
-	  @Path("{categoryType}/{payDate}/{purchaseName}/{price}")
+	  @Path("{categoryType}/{payDate}/{purchaseName}/{price}/{purchaseId}")
 	  @Produces(MediaType.APPLICATION_JSON)
 	  public Map<String, Object> sendNewPurchaseInJSON(
 			  @PathParam("categoryType") String categoryType, 
 			  @PathParam("payDate") String payDate,
 			  @PathParam("purchaseName") String purchaseName, 
 			  @PathParam("price") String price,
+			  @PathParam("purchaseId") Long purchaseId,
 			  @Context HttpHeaders hh){
 	  	Map<String, Object> result = new HashMap<String, Object>();	  	
 	  	List<String> errors = new ArrayList<String>();    	
@@ -128,10 +131,14 @@ public class PurchaseNewRestService {
 		catch (Exception ex){
 			errors.add("Введено некорректное значение в поле 'Цена'.");
 			return result;
-		}	  	
-	  	
-	  	QueryResponse resp = PurchaseService.createPurchaseByCategoryId(
-	  			login, purchaseName, categoryId, date, aPrice);
+		}
+		QueryResponse resp = null;
+		if (purchaseId.equals(GENERATE_NEW_ID_FLAG)) {
+			resp = PurchaseService.createPurchaseByCategoryId(
+					login, purchaseName, categoryId, date, aPrice);
+		} else {
+			resp = PurchaseService.updatePurchaseByPurchaseId(purchaseId, login, purchaseName, categoryId, date, aPrice);
+		}
     	if (resp.getCode() != ResponseCode.OK) {
     		errors.add(resp.getMessage());
     	} else {			    	

@@ -36,6 +36,10 @@ app.controller('CategoriesController', ['$scope', '$http', function ($scope, $ht
                     });
             };
 
+            $scope.editPurchase = function (purchase) {
+                location.href = '#/newpurchase/edit/' + purchase.id;
+            };
+
             $scope.getPurchasesByCategory = function (categ) {
                 location.href = '#/purchases/' + categ.id;
             }
