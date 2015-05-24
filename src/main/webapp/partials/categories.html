@@ -13,6 +13,7 @@
 				<th>{{locres.t_Date}}</th>
 				<th>{{locres.t_Buy}}</th>
 				<th>{{locres.t_Price}}</th>
+				<th>{{locres.t_Action}}</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -20,6 +21,10 @@
 				<td>{{purchase.payDate}}</td>
 				<td>{{purchase.name}}</td>
 				<td>{{purchase.price}}</td>
+				<td>
+					<button type="button" class="btn btn-sm btn-default" ng-click="editPurchase()">{{locres.a_edit}}</button>
+					<button type="button" class="btn btn-sm btn-danger" ng-click="deletePurchase()">{{locres.a_delete}}</button>
+				</td>
 			</tr>
 			</tbody>
 		</table>

@@ -7,13 +7,12 @@ app.controller('NewPurchaseController', ['$scope', '$http', '$routeParams', func
 	var path = $routeParams.purchaseName ? ('/' + $routeParams.categoryType
 	+ '/' + $routeParams.payDate
 	+ '/' + $routeParams.purchaseName
-	+ '/' + $routeParams.price) : '';
+	+ '/' + $routeParams.price) : ($routeParams.purchaseId ? ('/edit/' + $routeParams.purchaseId) : '');
 
 	$http.get('/ngdemo/rest/user/newpurchase' + path)
 		.success(function (response) {
 			$scope.data = response;
 			$scope.locres = response.locres;
-//			$scope.format = 'dd.MM.yyyy';
 			$scope.today = function() {
 				var today = new Date();
 				var dd = today.getDate();
@@ -28,15 +27,6 @@ app.controller('NewPurchaseController', ['$scope', '$http', '$routeParams', func
 				$scope.payDate = dd+'.'+mm+'.'+yyyy
 			};
 			$scope.today();
-/*			$scope.clear = function () {
-				$scope.payDate = null;
-			};
-			$scope.open = function($event) {
-				$event.preventDefault();
-				$event.stopPropagation();
-
-				$scope.opened = true;
-			};*/
 			$scope.send = function () {
 				if ($scope.isEmpty($scope.purchaseName)) {
 					alert($scope.locres.InvalidFieldValue.replace("%s", $scope.locres.PurchaseName));

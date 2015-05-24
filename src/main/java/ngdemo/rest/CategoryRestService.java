@@ -31,6 +31,9 @@ public class CategoryRestService {
 		locres.put("t_Buy", "Покупка");
 		locres.put("t_Price", "Цена");
 		locres.put("t_Date", "Дата");
+		locres.put("t_Action", "Действия");
+		locres.put("a_delete", "Удалить");
+		locres.put("a_edit", "Изменить");
 	}
 	
     @GET

@@ -8,6 +8,7 @@ public class PurchaseRest {
 	public String name;
 	public String payDate;
 	public String price;
+	public Long categoryId;
 	public PurchaseRest(Long id, String name) {
 		super();
 		this.id = id;
@@ -19,6 +20,14 @@ public class PurchaseRest {
 		this.name = name;
 		this.payDate = payDate;
 		this.price = price;
+	}
+	public PurchaseRest(Long id, String name, String payDate, String price, Long categoryId) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.payDate = payDate;
+		this.price = price;
+		this.categoryId = categoryId;
 	}
 
 	public Long getId() {
@@ -45,6 +54,10 @@ public class PurchaseRest {
 	public void setPrice(String price) {
 		this.price = price;
 	}
-
-	
+	public Long getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
 }

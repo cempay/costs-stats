@@ -130,6 +130,28 @@ public class PurchaseService {
 		return res;
 	}
 
+	public static Purchase getPurchaseById(/*todo String login,*/ String id){
+		Purchase purch = null;
+    	SessionFactory sf = HibernateUtil.getSessionFactory();
+    	Session session = sf.openSession();
+		try {
+			List res = null;
+			String hql = "from Purchase where id=:id";
+			Query query = session.createQuery(hql);
+			query.setParameter("id", id);
+			res = query.list();
+			if (res.size() > 0)
+				purch = (Purchase)res.get(0);
+		}
+    	catch(HibernateException ex){
+    		System.out.println("#Database error: "+ ex);
+    	}
+		finally {
+			session.close();
+		}
+		return purch;
+	}
+
 	@Deprecated
 	public static List<Purchase> getPurchasesByCategoryByPeriod(String categoryName, Date dateFrom, Date dateTo, QueryResponse resp){
 		List res = null;

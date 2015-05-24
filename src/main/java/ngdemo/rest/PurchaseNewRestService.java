@@ -20,11 +20,14 @@ import javax.ws.rs.core.MediaType;
 import net.viralpatel.common.DateUtils;
 import net.viralpatel.common.QueryResponse;
 import net.viralpatel.common.ResponseCode;
+import net.viralpatel.common.SumUtils;
 import net.viralpatel.dataAccess.CategoryService;
 import net.viralpatel.dataAccess.PurchaseService;
 import net.viralpatel.hibernate.Category;
+import net.viralpatel.hibernate.Purchase;
 import ngdemo.auth.LoginUtils;
 import ngdemo.domain.CategoryRest;
+import ngdemo.domain.PurchaseRest;
 
 @Path("/user/newpurchase")
 public class PurchaseNewRestService {	
@@ -51,7 +54,33 @@ public class PurchaseNewRestService {
     	result.put("locres", locres);
     	result.put("errors", errors);
     	return result;
-    }	
+    }
+
+	@GET
+	@Path("/edit")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Map<String, Object> editPurchaseByIdJSON(
+			@PathParam("purchaseId") String purchaseId,
+			@Context HttpHeaders hh){
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("locres", locres);
+		List<String> errors = new ArrayList<String>();
+		result.put("errors", errors);
+		Purchase purch = PurchaseService.getPurchaseById(purchaseId);
+		if (purch == null) {
+			errors.add("Выбранную покупку нельзя отредактировать");
+		} else {
+			result.put("purchase", new PurchaseRest(
+					purch.getId(), purch.getName(),
+					new SimpleDateFormat(DateUtils.DD_MM_YYYY).format(purch.getPayDate()),
+					SumUtils.decimalFormatter.format(purch.getPrice()),
+					purch.getCategory().getId()
+			));
+			result.put("categories", getCategoryRestList(LoginUtils.getLogin(hh)));
+		}
+		return result;
+	}
+
       @GET
 	  @Path("{categoryType}/{payDate}/{purchaseName}/{price}")
 	  @Produces(MediaType.APPLICATION_JSON)
