@@ -240,29 +240,15 @@ public class PurchaseService {
     	SessionFactory sf = HibernateUtil.getSessionFactory();
     	Session session = sf.openSession();
 		try {
-/*			String hql = "from Purchase"
-					+ " where category.id = :categoryId"
-					+ " and payDate >= :dateFrom"
-					+ " and payDate < :dateTo"
-					+ " order by payDate desc"
-					;
-			Query query = session.createQuery(hql);
-			query.setParameter("categoryId", categoryId);
-			query.setParameter("dateFrom", dateFrom);
-			query.setParameter("dateTo", dateTo);
-			res = query.list();
-			resp.setCode(ResponseCode.OK);*/
-			
-			
 			Criteria cr1 = session.createCriteria(Category.class);
 			cr1.add(Restrictions.eq("id", categoryId))
 					.createCriteria("user").add(Restrictions.eq("login", login));
 			List<Category> categories = (List<Category>)cr1.list();
 			
-			Calendar calendar = new GregorianCalendar();
+			/*Calendar calendar = new GregorianCalendar();
 			calendar.setTime(dateFrom);
 			calendar.add(Calendar.SECOND, -1);
-			dateFrom = calendar.getTime();
+			dateFrom = calendar.getTime();*/
 			
 			Criteria cr = session.createCriteria(Purchase.class);
 			cr.add(Restrictions.eq("category", categories.get(0)))
@@ -270,14 +256,52 @@ public class PurchaseService {
 					.addOrder(Order.desc("payDate"))
 			;
 			res = cr.list();
-			
 			resp.setCode(ResponseCode.OK);
-			
 		}	
     	catch(HibernateException ex){
     		System.out.println("#Database error: "+ ex);
     		resp.fillQueryResponse(ResponseCode.ERROR, "������ ��������� ������ ������� �� ��������.", ex.getMessage());
     	}    	
+		finally {
+			session.close();
+		}
+		return res;
+	}
+
+	/**
+	 * @return int[2], 2 флага наличия предшествующих/последующих периодов для отображения prev|next
+	 */
+	public static int[] checkOutCurrentPeriodPurchasesByCategoryIdByPeriod(String login, Long categoryId, Date dateFrom, Date dateTo, QueryResponse resp){
+		int[] res = {0 , 0};
+		SessionFactory sf = HibernateUtil.getSessionFactory();
+		Session session = sf.openSession();
+		try {
+			Criteria cr1 = session.createCriteria(Category.class);
+			cr1.add(Restrictions.eq("id", categoryId))
+					.createCriteria("user").add(Restrictions.eq("login", login));
+			List<Category> categories = (List<Category>)cr1.list();
+
+			String hql = "select 1 from Purchase p where p.category=:categ and p.payDate < :dateFrom";
+			Query query = session.createQuery(hql);
+			query.setParameter("categ", categories.get(0));
+			query.setParameter("dateFrom", dateFrom);
+			List prev = query.list();
+			if (prev!=null && prev.size()>0)
+				res[0] = 1;
+
+			hql = "select 1 from Purchase p where p.category=:categ and p.payDate > :dateTo";
+			query = session.createQuery(hql);
+			query.setParameter("categ", categories.get(0));
+			query.setParameter("dateTo", dateTo);
+			List next = query.list();
+			if (next!=null && next.size()>0)
+				res[1] = 1;
+			resp.setCode(ResponseCode.OK);
+		}
+		catch(HibernateException ex){
+			System.out.println("#Database error: "+ ex);
+			resp.fillQueryResponse(ResponseCode.ERROR, "������ ��������� ������ ������� �� ��������.", ex.getMessage());
+		}
 		finally {
 			session.close();
 		}

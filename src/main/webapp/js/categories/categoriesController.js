@@ -14,6 +14,8 @@ app.controller('CategoriesController', ['$scope', '$http', function ($scope, $ht
             if ($scope.categories){
                 $scope.categories[0].open = true;
                 $scope.categories[0].frash = true;
+                $scope.categories[0].prev = (response.prev == 1);
+                $scope.categories[0].next = (response.next == 1);
             }
             $scope.oneAtATime = true;
 
@@ -26,6 +28,8 @@ app.controller('CategoriesController', ['$scope', '$http', function ($scope, $ht
                     .success(function (resp2) {
                         $scope.categories[index].purchases = resp2.purchases;
                         $scope.categories[index].frash = true;
+                        $scope.categories[index].prev = (resp2.prev == 1);
+                        $scope.categories[index].next = (resp2.next == 1);
                     })
                     .error(function (data2, status2, headers2, config2) {
                         if (status2 == 401) {
@@ -42,7 +46,11 @@ app.controller('CategoriesController', ['$scope', '$http', function ($scope, $ht
 
             $scope.getPurchasesByCategory = function (categ) {
                 location.href = '#/purchases/' + categ.id;
-            }
+            };
+
+            $scope.getPage = function(page){
+                alert(page);
+            };
         })
         .error(function (data, status, headers, config) {
             if (status == 401) {

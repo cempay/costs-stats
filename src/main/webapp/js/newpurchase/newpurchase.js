@@ -68,7 +68,7 @@ app.controller('NewPurchaseController', ['$scope', '$http', '$routeParams', func
 						+ '/' + $scope.payDate
 						+ '/' + $scope.purchaseName
 						+ '/' + $scope.price
-						+ ($routeParams.purchaseId ? '/' + $routeParams.purchaseId : GENERATE_NEW_ID);
+						+ '/' + ($routeParams.purchaseId ? $routeParams.purchaseId : GENERATE_NEW_ID);
 					console.log('NewPurchaseController: befor href, link=' + link);
 					location.href = link;
 					console.log('NewPurchaseController: after href');

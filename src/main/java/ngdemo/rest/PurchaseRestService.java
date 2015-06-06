@@ -40,17 +40,6 @@ public class PurchaseRestService {
     	List<String> errors = new ArrayList<String>();    	
     	
     	List<PurchaseRest> purchRestList = new ArrayList<PurchaseRest>();
-/*    	Calendar calendar = new GregorianCalendar();
-    	calendar.set(2015, Calendar.FEBRUARY, 1);
-    	Date dateFrom = calendar.getTime();
-    	calendar.set(2015, Calendar.MARCH, 31);
-    	Date dateTo = calendar.getTime();*/
-/*    	Calendar calendar = new GregorianCalendar();
-    	calendar.set(Calendar.DAY_OF_MONTH, 1);
-    	calendar.set(Calendar.HOUR, 0);
-    	calendar.set(Calendar.MINUTE, 0);
-    	calendar.set(Calendar.SECOND, 0);
-    	calendar.add(Calendar.SECOND, -1);*/
     	Date dateFrom = DateUtils.beginOfMonth(null);
     	Date dateTo = DateUtils.endOfMonth(null);
 		String login = LoginUtils.getLogin(hh);
@@ -69,6 +58,11 @@ public class PurchaseRestService {
 	    				));
 	    	}
 	    	result.put("purchases", purchRestList);
+			int[] outPeriod = PurchaseService.checkOutCurrentPeriodPurchasesByCategoryIdByPeriod(
+					login, Long.valueOf(categoryId), dateFrom, dateTo, resp);
+	    	result.put("prev", outPeriod[0]);
+	    	result.put("next", outPeriod[1]);
+
     	}
     	
     	result.put("errors", errors);

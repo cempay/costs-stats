@@ -67,6 +67,10 @@ public class CategoryRestService {
 					));
 				}
 				categRestList.get(0).setPurchases(purchaseRests);
+				int[] outPeriod = PurchaseService.checkOutCurrentPeriodPurchasesByCategoryIdByPeriod(
+						login, categRestList.get(0).getId(), dateFrom, dateTo, resp);
+				result.put("prev", outPeriod[0]);
+				result.put("next", outPeriod[1]);
 			}
 		}
     	result.put("categories", categRestList);
